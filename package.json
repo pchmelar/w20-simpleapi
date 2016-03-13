@@ -1,0 +1,26 @@
+{
+  "name": "hw03",
+  "version": "1.0.0",
+  "description": "Simple REST API in node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pchmelar/w20-simpleapi.git"
+  },
+  "keywords": [
+    "nodejs",
+    "w20",
+    "rest",
+    "api"
+  ],
+  "author": "pchmelar",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.7"
+  }
+}
