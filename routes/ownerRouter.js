@@ -1,11 +1,11 @@
 module.exports = (function() {
 
-	var mongoose = require('mongoose');
+    var mongoose = require('mongoose');
     var router = require('express').Router();
     var Owner = require('../models/owner');
 
     router.get('/', function(req, res) {
-        Owner.find({}, { '_id': false }, function(err, owners) {
+        Owner.find({}, function(err, owners) {
             if (err) throw err;
             res.json(owners);
         });
@@ -13,12 +13,49 @@ module.exports = (function() {
 
     router.get('/:id', function(req, res) {
         if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Owner.findById(req.params.id, { '_id': false }, function(err, owner) {
+            Owner.findById(req.params.id, function(err, owner) {
                 if (err) throw err;
                 if (owner == null) {
                     res.statusCode = 404;
                     res.send('Error 404: No owner found');
                 } else res.json(owner);
+            });
+        } else {
+            res.statusCode = 404;
+            res.send('Error 404: Invalid ID');
+        }
+    });
+
+    router.post('/', function(req, res) {
+
+        if (!req.body.hasOwnProperty('name') ||
+            !req.body.hasOwnProperty('surname') ||
+            !req.body.hasOwnProperty('age') ||
+            !req.body.hasOwnProperty('places')) {
+            res.statusCode = 400;
+            res.send('Error 400: Post syntax incorrect.');
+        }
+
+        // create a new object
+        var newOwner = Owner({
+            name: req.body.name,
+            surname: req.body.surname,
+            age: req.body.age,
+            places: req.body.places
+        });
+
+        // save the object
+        newOwner.save(function(err) {
+            if (err) throw err;
+            res.json(true);
+        });
+    });
+
+    router.delete('/:id', function(req, res) {
+        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+            Owner.findByIdAndRemove(req.params.id, function(err) {
+                if (err) throw err;
+                res.json(true);
             });
         } else {
             res.statusCode = 404;
