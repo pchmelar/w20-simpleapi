@@ -12,12 +12,10 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/w20');
 
 // routes
-var quote = require('./routes/quoteRouter');
 var place = require('./routes/placeRouter');
 var owner = require('./routes/ownerRouter');
 var car = require('./routes/carRouter');
 var plate = require('./routes/plateRouter');
-app.use('/quote', quote);
 app.use('/place', place);
 app.use('/owner', owner);
 app.use('/car', car);
