@@ -113,3 +113,27 @@ Status codes: 200 - ok, 400 - bad request, 404 - not found
 
 DELETE /plate/:id - delete specific plate  
 Status codes: 200 - ok, 400 - bad request, 404 - not found
+
+## Resource: customer
+
+```json
+{
+	"name": String,
+	"orders": Array,
+}
+```
+
+GET /customer - get list of customers  
+Status codes: 200 - ok, 400 - bad request
+
+GET /customer/:id - get specific customer  
+Status codes: 200 - ok, 400 - bad request, 404 - not found
+
+POST /customer - create customer  
+Status codes: 201 - created, 400 - bad request
+
+PUT /customer/:id - update specific customer  
+Status codes: 200 - ok, 400 - bad request, 404 - not found
+
+DELETE /customer/:id - delete specific customer  
+Status codes: 200 - ok, 400 - bad request, 404 - not found
