@@ -17,7 +17,7 @@ module.exports = (function() {
                 if (err) throw err;
                 if (car == null) {
                     res.statusCode = 404;
-                    res.send('Error 404: No car found');
+                    res.send('Error 404: Car with specified ID not found');
                 } else res.json(car);
             });
         } else {
@@ -51,6 +51,35 @@ module.exports = (function() {
             if (err) throw err;
             res.json(true);
         });
+    });
+
+    router.put('/:id', function(req, res) {
+        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+            Car.findById(req.params.id, function(err, car) {
+                if (err) throw err;
+                if (car == null) {
+                    res.statusCode = 404;
+                    res.send('Error 404: Car with specified ID not found');
+                } else {
+
+                    // update the object
+                    if (req.body.hasOwnProperty('brand')) car.brand = req.body.brand;
+                    if (req.body.hasOwnProperty('model')) car.model = req.body.model;
+                    if (req.body.hasOwnProperty('year')) car.year = req.body.year;
+                    if (req.body.hasOwnProperty('ownerId')) car.ownerId = req.body.ownerId;
+                    if (req.body.hasOwnProperty('plateId')) car.plateId = req.body.plateId;
+
+                    // save the object
+                    car.save(function(err) {
+                        if (err) throw err;
+                        res.json(true);
+                    });
+                }
+            });
+        } else {
+            res.statusCode = 404;
+            res.send('Error 404: Invalid ID');
+        }
     });
 
     router.delete('/:id', function(req, res) {

@@ -17,7 +17,7 @@ module.exports = (function() {
                 if (err) throw err;
                 if (plate == null) {
                     res.statusCode = 404;
-                    res.send('Error 404: No plate found');
+                    res.send('Error 404: Plate with specified ID not found');
                 } else res.json(plate);
             });
         } else {
@@ -43,6 +43,31 @@ module.exports = (function() {
             if (err) throw err;
             res.json(true);
         });
+    });
+
+    router.put('/:id', function(req, res) {
+        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+            Plate.findById(req.params.id, function(err, plate) {
+                if (err) throw err;
+                if (plate == null) {
+                    res.statusCode = 404;
+                    res.send('Error 404: Plate with specified ID not found');
+                } else {
+
+                    // update the object
+                    if (req.body.hasOwnProperty('plate')) plate.plate = req.body.plate;
+
+                    // save the object
+                    plate.save(function(err) {
+                        if (err) throw err;
+                        res.json(true);
+                    });
+                }
+            });
+        } else {
+            res.statusCode = 404;
+            res.send('Error 404: Invalid ID');
+        }
     });
 
     router.delete('/:id', function(req, res) {

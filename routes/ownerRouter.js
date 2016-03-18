@@ -17,7 +17,7 @@ module.exports = (function() {
                 if (err) throw err;
                 if (owner == null) {
                     res.statusCode = 404;
-                    res.send('Error 404: No owner found');
+                    res.send('Error 404: Owner with specified ID not found');
                 } else res.json(owner);
             });
         } else {
@@ -49,6 +49,34 @@ module.exports = (function() {
             if (err) throw err;
             res.json(true);
         });
+    });
+
+    router.put('/:id', function(req, res) {
+        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+            Owner.findById(req.params.id, function(err, owner) {
+                if (err) throw err;
+                if (owner == null) {
+                    res.statusCode = 404;
+                    res.send('Error 404: Owner with specified ID not found');
+                } else {
+
+                    // update the object
+                    if (req.body.hasOwnProperty('name')) owner.name = req.body.name;
+                    if (req.body.hasOwnProperty('surname')) owner.surname = req.body.surname;
+                    if (req.body.hasOwnProperty('age')) owner.age = req.body.age;
+                    if (req.body.hasOwnProperty('places')) owner.places = req.body.places;
+
+                    // save the object
+                    owner.save(function(err) {
+                        if (err) throw err;
+                        res.json(true);
+                    });
+                }
+            });
+        } else {
+            res.statusCode = 404;
+            res.send('Error 404: Invalid ID');
+        }
     });
 
     router.delete('/:id', function(req, res) {
