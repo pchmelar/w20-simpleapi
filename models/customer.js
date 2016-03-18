@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 // create a schema
 var customerSchema = new Schema({
 	name: String,
-	orders: Array
+	orders: Array,
+	toDelete: Boolean
 });
 
 // the schema is useless so far

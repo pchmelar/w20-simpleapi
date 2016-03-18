@@ -135,5 +135,8 @@ Status codes: 201 - created, 400 - bad request
 PUT /customer/:id - update specific customer  
 Status codes: 200 - ok, 400 - bad request, 404 - not found
 
-DELETE /customer/:id - delete specific customer  
-Status codes: 200 - ok, 400 - bad request, 404 - not found
+DELETE /customer/:id - mark specific customer for deletion  
+Status codes: 202 - accepted, 400 - bad request, 404 - not found
+
+DELETE /customer/:id/confirm - delete specific user (previously marked for deletion)  
+Status codes: 202 - ok, 400 - bad request, 404 - not found
