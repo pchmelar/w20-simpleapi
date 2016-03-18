@@ -21,8 +21,8 @@ module.exports = (function() {
                 } else res.json(owner);
             });
         } else {
-            res.statusCode = 404;
-            res.send('Error 404: Invalid ID');
+            res.statusCode = 400;
+            res.send('Error 400: Invalid ID');
         }
     });
 
@@ -75,20 +75,28 @@ module.exports = (function() {
                 }
             });
         } else {
-            res.statusCode = 404;
-            res.send('Error 404: Invalid ID');
+            res.statusCode = 400;
+            res.send('Error 400: Invalid ID');
         }
     });
 
     router.delete('/:id', function(req, res) {
         if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Owner.findByIdAndRemove(req.params.id, function(err) {
+            Owner.findById(req.params.id, function(err, owner) {
                 if (err) throw err;
-                res.json(true);
+                if (owner == null) {
+                    res.statusCode = 404;
+                    res.send('Error 404: Owner with specified ID not found');
+                } else {
+                    owner.remove(function(err) {
+                        if (err) throw err;
+                        res.json(true);
+                    });
+                }
             });
         } else {
-            res.statusCode = 404;
-            res.send('Error 404: Invalid ID');
+            res.statusCode = 400;
+            res.send('Error 400: Invalid ID');
         }
     });
 
