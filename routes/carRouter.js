@@ -5,10 +5,30 @@ module.exports = (function() {
     var Car = require('../models/car');
 
     router.get('/', function(req, res) {
-        Car.find({}, function(err, cars) {
-            if (err) throw err;
-            res.json(cars);
-        });
+
+    	//query by string
+        if (req.query.hasOwnProperty('brand')) {
+            Car.find({ brand: req.query.brand }, function(err, cars) {
+                if (err) throw err;
+                res.json(cars);
+            });
+        } else if (req.query.hasOwnProperty('model')) {
+            Car.find({ model: req.query.model }, function(err, cars) {
+                if (err) throw err;
+                res.json(cars);
+            });
+        } else if (req.query.hasOwnProperty('year')) {
+            Car.find({ year: req.query.year }, function(err, cars) {
+                if (err) throw err;
+                res.json(cars);
+            });
+        } else {
+            Car.find({}, function(err, cars) {
+                if (err) throw err;
+                res.json(cars);
+            });
+        }
+        
     });
 
     router.get('/:id', function(req, res) {
