@@ -34,21 +34,22 @@ module.exports = (function() {
             !req.body.hasOwnProperty('places')) {
             res.statusCode = 400;
             res.send('Error 400: Post syntax incorrect.');
+        } else {
+            // create a new object
+            var newOwner = Owner({
+                name: req.body.name,
+                surname: req.body.surname,
+                age: req.body.age,
+                places: req.body.places
+            });
+
+            // save the object
+            newOwner.save(function(err) {
+                if (err) throw err;
+                res.statusCode = 201;
+                res.json(true);
+            });
         }
-
-        // create a new object
-        var newOwner = Owner({
-            name: req.body.name,
-            surname: req.body.surname,
-            age: req.body.age,
-            places: req.body.places
-        });
-
-        // save the object
-        newOwner.save(function(err) {
-            if (err) throw err;
-            res.json(true);
-        });
     });
 
     router.put('/:id', function(req, res) {

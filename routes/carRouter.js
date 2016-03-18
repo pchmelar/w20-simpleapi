@@ -6,7 +6,7 @@ module.exports = (function() {
 
     router.get('/', function(req, res) {
 
-    	//query by string
+        //query by string
         if (req.query.hasOwnProperty('brand')) {
             Car.find({ brand: req.query.brand }, function(err, cars) {
                 if (err) throw err;
@@ -28,7 +28,7 @@ module.exports = (function() {
                 res.json(cars);
             });
         }
-        
+
     });
 
     router.get('/:id', function(req, res) {
@@ -55,22 +55,23 @@ module.exports = (function() {
             !req.body.hasOwnProperty('plateId')) {
             res.statusCode = 400;
             res.send('Error 400: Post syntax incorrect.');
+        } else {
+            // create a new object
+            var newCar = Car({
+                brand: req.body.brand,
+                model: req.body.model,
+                year: req.body.year,
+                ownerId: req.body.ownerId,
+                plateId: req.body.plateId
+            });
+
+            // save the object
+            newCar.save(function(err) {
+                if (err) throw err;
+                res.statusCode = 201;
+                res.json(true);
+            });
         }
-
-        // create a new object
-        var newCar = Car({
-            brand: req.body.brand,
-            model: req.body.model,
-            year: req.body.year,
-            ownerId: req.body.ownerId,
-            plateId: req.body.plateId
-        });
-
-        // save the object
-        newCar.save(function(err) {
-            if (err) throw err;
-            res.json(true);
-        });
     });
 
     router.put('/:id', function(req, res) {

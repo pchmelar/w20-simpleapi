@@ -31,18 +31,19 @@ module.exports = (function() {
         if (!req.body.hasOwnProperty('plate')) {
             res.statusCode = 400;
             res.send('Error 400: Post syntax incorrect.');
+        } else {
+            // create a new object
+            var newPlate = Plate({
+                plate: req.body.plate
+            });
+
+            // save the object
+            newPlate.save(function(err) {
+                if (err) throw err;
+                res.statusCode = 201;
+                res.json(true);
+            });
         }
-
-        // create a new object
-        var newPlate = Plate({
-            plate: req.body.plate
-        });
-
-        // save the object
-        newPlate.save(function(err) {
-            if (err) throw err;
-            res.json(true);
-        });
     });
 
     router.put('/:id', function(req, res) {

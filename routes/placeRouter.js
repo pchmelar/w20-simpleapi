@@ -35,22 +35,23 @@ module.exports = (function() {
             !req.body.hasOwnProperty('country')) {
             res.statusCode = 400;
             res.send('Error 400: Post syntax incorrect.');
+        } else {
+            // create a new object
+            var newPlace = Place({
+                street: req.body.street,
+                number: req.body.number,
+                city: req.body.city,
+                postalCode: req.body.postalCode,
+                country: req.body.country
+            });
+
+            // save the object
+            newPlace.save(function(err) {
+                if (err) throw err;
+                res.statusCode = 201;
+                res.json(true);
+            });
         }
-
-        // create a new object
-        var newPlace = Place({
-            street: req.body.street,
-            number: req.body.number,
-            city: req.body.city,
-            postalCode: req.body.postalCode,
-            country: req.body.country
-        });
-
-        // save the object
-        newPlace.save(function(err) {
-            if (err) throw err;
-            res.json(true);
-        });
     });
 
     router.put('/:id', function(req, res) {
