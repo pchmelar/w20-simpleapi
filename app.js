@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // mongoDB
 var mongoose = require('mongoose');
-mongoose.connect('process.env.PROD_MONGODB');
+mongoose.connect(process.env.PROD_MONGODB);
 
 // routes
 var place = require('./routes/placeRouter');
