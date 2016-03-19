@@ -5,9 +5,16 @@ module.exports = (function() {
     var Customer = require('../models/customer');
 
     router.get('/', function(req, res) {
-        Customer.find({}, { 'toDelete': false }, function(err, customers) {
+        Customer.find({}, { 'toDelete': false }, { sort: '-updatedAt' }, function(err, customers) {
             if (err) throw err;
-            res.json(customers);
+            res.header('Cache-Control', 'private, no-store, max-age=300');
+            res.header('Last-Modified', customers[0].updatedAt);
+            if (1000*Math.floor((new Date(req.get('If-Modified-Since')).getTime())/1000) >= 
+                1000*Math.floor((new Date(customers[0].updatedAt).getTime())/1000)) {
+                res.statusCode = 304;
+                res.send('Code 304: Not modified');
+            }
+            else res.json(customers);
         });
     });
 

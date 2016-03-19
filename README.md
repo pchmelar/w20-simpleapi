@@ -124,7 +124,7 @@ Status codes: 200 - ok, 400 - bad request, 404 - not found
 ```
 
 GET /customer - get list of customers  
-Status codes: 200 - ok, 400 - bad request
+Status codes: 200 - ok, 304 - not modified, 400 - bad request
 
 GET /customer/:id - get specific customer  
 Status codes: 200 - ok, 400 - bad request, 404 - not found

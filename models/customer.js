@@ -7,6 +7,9 @@ var customerSchema = new Schema({
 	name: String,
 	orders: Array,
 	toDelete: Boolean
+},
+{
+	timestamps: true
 });
 
 // the schema is useless so far
