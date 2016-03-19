@@ -124,6 +124,7 @@ Status codes: 200 - ok, 400 - bad request, 404 - not found
 ```
 
 GET /customer - get list of customers  
+This resource supports caching via conditional GET (If-None-Match/If-Modified-Since)  
 Status codes: 200 - ok, 304 - not modified, 400 - bad request
 
 GET /customer/:id - get specific customer  

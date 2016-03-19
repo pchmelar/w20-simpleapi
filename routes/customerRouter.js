@@ -4,23 +4,28 @@ module.exports = (function() {
     var router = require('express').Router();
     var Customer = require('../models/customer');
 
+    var crypto = require("crypto");
+
+    function computeWeakETag(customers) {
+        var content = "";
+        for (var i = 0; i < customers.length; i++)
+            content += customers[i].id + customers[i].name;
+        return crypto.createHash('md5').update(content).digest("hex");
+    }
+
     router.get('/', function(req, res) {
-        Customer.find({}, { 'toDelete': false }, { sort: '-updatedAt' }, function(err, customers) {
+        Customer.find({}, { '_id':1, 'name':1, 'orders':1 }, { sort:'-updatedAt' }, function(err, customers) {
             if (err) throw err;
             res.header('Cache-Control', 'private, no-store, max-age=300');
             res.header('Last-Modified', customers[0].updatedAt);
-            if (1000*Math.floor((new Date(req.get('If-Modified-Since')).getTime())/1000) >= 
-                1000*Math.floor((new Date(customers[0].updatedAt).getTime())/1000)) {
-                res.statusCode = 304;
-                res.send('Code 304: Not modified');
-            }
-            else res.json(customers);
+            res.header('ETag', computeWeakETag(customers));
+            res.json(customers);
         });
     });
 
     router.get('/:id', function(req, res) {
         if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Customer.findById(req.params.id, { 'toDelete': false }, function(err, customer) {
+            Customer.findById(req.params.id, { '_id':1, 'name':1, 'orders':1 }, function(err, customer) {
                 if (err) throw err;
                 if (customer == null) {
                     res.statusCode = 404;

@@ -1,6 +1,7 @@
 // express
 var express = require('express');
 var app = express();
+app.set('json spaces', 4);
 
 // bodyParser
 var bodyParser = require('body-parser')
