@@ -6,7 +6,7 @@ module.exports = (function() {
 
     router.get('/', function(req, res) {
 
-        //query by string
+        // query by string
         if (req.query.hasOwnProperty('brand')) {
             Car.find({ brand: req.query.brand }, function(err, cars) {
                 if (err) throw err;

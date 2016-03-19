@@ -28,69 +28,95 @@ module.exports = (function() {
 
     router.post('/', function(req, res) {
 
-        if (!req.body.hasOwnProperty('customer') ||
-            !req.body.hasOwnProperty('items')) {
-            res.statusCode = 400;
-            res.send('Error 400: Post syntax incorrect.');
-        } else {
-            // create a new object
-            var newOrder = Order({
-                customer: req.body.customer,
-                items: req.body.items
-            });
+        // check apikey (naive implementation)
+        if (req.query.hasOwnProperty('apikey') && req.query.apikey == 'abc') {
 
-            // save the object
-            newOrder.save(function(err) {
-                if (err) throw err;
-                res.statusCode = 201;
-                res.json(true);
-            });
+            if (!req.body.hasOwnProperty('customer') ||
+                !req.body.hasOwnProperty('items')) {
+                res.statusCode = 400;
+                res.send('Error 400: Post syntax incorrect.');
+            } else {
+                // create a new object
+                var newOrder = Order({
+                    customer: req.body.customer,
+                    items: req.body.items
+                });
+
+                // save the object
+                newOrder.save(function(err) {
+                    if (err) throw err;
+                    res.statusCode = 201;
+                    res.json(true);
+                });
+            }
+
+        } else {
+            res.statusCode = 403;
+            res.send('Error 403: Invalid API key');
         }
     });
 
     router.put('/:id', function(req, res) {
-        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Order.findById(req.params.id, function(err, order) {
-                if (err) throw err;
-                if (order == null) {
-                    res.statusCode = 404;
-                    res.send('Error 404: Order with specified ID not found');
-                } else {
 
-                    // update the object
-                    if (req.body.hasOwnProperty('customer')) order.customer = req.body.customer;
-                    if (req.body.hasOwnProperty('items')) order.items = req.body.items;
+        // check apikey (naive implementation)
+        if (req.query.hasOwnProperty('apikey') && req.query.apikey == 'abc') {
 
-                    // save the object
-                    order.save(function(err) {
-                        if (err) throw err;
-                        res.json(true);
-                    });
-                }
-            });
+            if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+                Order.findById(req.params.id, function(err, order) {
+                    if (err) throw err;
+                    if (order == null) {
+                        res.statusCode = 404;
+                        res.send('Error 404: Order with specified ID not found');
+                    } else {
+
+                        // update the object
+                        if (req.body.hasOwnProperty('customer')) order.customer = req.body.customer;
+                        if (req.body.hasOwnProperty('items')) order.items = req.body.items;
+
+                        // save the object
+                        order.save(function(err) {
+                            if (err) throw err;
+                            res.json(true);
+                        });
+                    }
+                });
+            } else {
+                res.statusCode = 400;
+                res.send('Error 400: Invalid ID');
+            }
+
         } else {
-            res.statusCode = 400;
-            res.send('Error 400: Invalid ID');
+            res.statusCode = 403;
+            res.send('Error 403: Invalid API key');
         }
     });
 
     router.delete('/:id', function(req, res) {
-        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Order.findById(req.params.id, function(err, order) {
-                if (err) throw err;
-                if (order == null) {
-                    res.statusCode = 404;
-                    res.send('Error 404: Order with specified ID not found');
-                } else {
-                    order.remove(function(err) {
-                        if (err) throw err;
-                        res.json(true);
-                    });
-                }
-            });
+
+        // check apikey (naive implementation)
+        if (req.query.hasOwnProperty('apikey') && req.query.apikey == 'abc') {
+
+            if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+                Order.findById(req.params.id, function(err, order) {
+                    if (err) throw err;
+                    if (order == null) {
+                        res.statusCode = 404;
+                        res.send('Error 404: Order with specified ID not found');
+                    } else {
+                        order.remove(function(err) {
+                            if (err) throw err;
+                            res.json(true);
+                        });
+                    }
+                });
+            } else {
+                res.statusCode = 400;
+                res.send('Error 400: Invalid ID');
+            }
+
         } else {
-            res.statusCode = 400;
-            res.send('Error 400: Invalid ID');
+            res.statusCode = 403;
+            res.send('Error 403: Invalid API key');
         }
     });
 

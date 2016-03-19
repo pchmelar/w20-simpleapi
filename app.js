@@ -18,7 +18,7 @@ var owner = require('./routes/ownerRouter');
 var car = require('./routes/carRouter');
 var plate = require('./routes/plateRouter');
 var customer = require('./routes/customerRouter');
-var order = require('./routers/orderRouter');
+var order = require('./routes/orderRouter');
 app.use('/place', place);
 app.use('/owner', owner);
 app.use('/car', car);

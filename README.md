@@ -146,8 +146,8 @@ Status codes: 202 - ok, 400 - bad request, 404 - not found
 
 ```json
 {
-	customer: Schema.ObjectId,
-	items: Array,
+	"customer": Schema.ObjectId,
+	"items": Array,
 }
 ```
 
@@ -157,11 +157,11 @@ Status codes: 200 - ok, 400 - bad request
 GET /order/:id - get specific order  
 Status codes: 200 - ok, 400 - bad request, 404 - not found
 
-POST /order - create order  
+POST /order?apikey={String} - create order (valid apikey must be provided)  
 Status codes: 201 - created, 400 - bad request
 
-PUT /order/:id - update specific order  
+PUT /order/:id?apikey={String} - update specific order (valid apikey must be provided)  
 Status codes: 200 - ok, 400 - bad request, 404 - not found
 
-DELETE /order/:id - delete specific order  
+DELETE /order/:id?apikey={String} - delete specific order (valid apikey must be provided)  
 Status codes: 202 - accepted, 400 - bad request, 404 - not found
