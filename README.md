@@ -141,3 +141,27 @@ Status codes: 202 - accepted, 400 - bad request, 404 - not found
 
 DELETE /customer/:id/confirm - delete specific user (previously marked for deletion)  
 Status codes: 202 - ok, 400 - bad request, 404 - not found
+
+## Resource: order
+
+```json
+{
+	customer: Schema.ObjectId,
+	items: Array,
+}
+```
+
+GET /order - get list of orders   
+Status codes: 200 - ok, 400 - bad request
+
+GET /order/:id - get specific order  
+Status codes: 200 - ok, 400 - bad request, 404 - not found
+
+POST /order - create order  
+Status codes: 201 - created, 400 - bad request
+
+PUT /order/:id - update specific order  
+Status codes: 200 - ok, 400 - bad request, 404 - not found
+
+DELETE /order/:id - delete specific order  
+Status codes: 202 - accepted, 400 - bad request, 404 - not found
