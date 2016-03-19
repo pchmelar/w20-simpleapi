@@ -14,7 +14,7 @@ module.exports = (function() {
     }
 
     router.get('/', function(req, res) {
-        Customer.find({}, { '_id':1, 'name':1, 'orders':1 }, { sort:'-updatedAt' }, function(err, customers) {
+        Customer.find({}, { 'toDelete': false }, { sort: '-updatedAt' }, function(err, customers) {
             if (err) throw err;
             res.header('Cache-Control', 'private, no-store, max-age=300');
             res.header('Last-Modified', customers[0].updatedAt);
@@ -25,7 +25,7 @@ module.exports = (function() {
 
     router.get('/:id', function(req, res) {
         if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-            Customer.findById(req.params.id, { '_id':1, 'name':1, 'orders':1 }, function(err, customer) {
+            Customer.findById(req.params.id, { 'toDelete': false }, function(err, customer) {
                 if (err) throw err;
                 if (customer == null) {
                     res.statusCode = 404;
