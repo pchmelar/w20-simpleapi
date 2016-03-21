@@ -3,7 +3,7 @@ module.exports = (function() {
     var mongoose = require('mongoose');
     var router = require('express').Router();
     var Order = require('../models/order');
-    var baseUrl = (process.env.IP || "http://localhost") + ":" + (process.env.PORT || 8080);
+    var baseUrl = process.env.PROD_URL || "http://localhost:8080";
 
     router.get('/', function(req, res) {
         Order.find({}, function(err, orders) {
