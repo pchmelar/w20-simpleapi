@@ -142,8 +142,7 @@ Status codes: 202 - accepted, 400 - bad request, 404 - not found
 DELETE /customer/:id/confirm - delete specific user (previously marked for deletion)  
 Status codes: 202 - ok, 400 - bad request, 404 - not found
 
-## Resource: order
-(basic HATEOAS support)
+## Resource: order (with basic HATEOAS support)
 
 ```json
 {
