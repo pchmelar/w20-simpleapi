@@ -143,6 +143,7 @@ DELETE /customer/:id/confirm - delete specific user (previously marked for delet
 Status codes: 202 - ok, 400 - bad request, 404 - not found
 
 ## Resource: order
+(basic HATEOAS support)
 
 ```json
 {
