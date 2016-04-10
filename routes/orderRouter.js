@@ -4,27 +4,38 @@ module.exports = (function() {
     var router = require('express').Router();
     var Order = require('../models/order');
     var baseUrl = process.env.PROD_URL || "http://localhost:8080";
+    baseUrl = baseUrl + "/order/";
 
     router.get('/', function(req, res) {
-        Order.find({}, function(err, orders) {
+        Order.paginate({}, { page: parseInt(req.query.page), limit: parseInt(req.query.limit) }, function(err, orders) {
             if (err) throw err;
 
             // construct response with HATEOAS
             var data = {};
             data.orders = []
-            for (var i = 0; i < orders.length; i++) {
+            for (var i = 0; i < orders.docs.length; i++) {
                 data.orders[i] = {};
-                data.orders[i]._id = orders[i]._id;
-                data.orders[i].customer = orders[i].customer;
-                data.orders[i].items = orders[i].items;
-                data.orders[i]._links = [{ "href": baseUrl + "/order/" + data.orders[i]._id, "rel": "self" }];
+                data.orders[i]._id = orders.docs[i]._id;
+                data.orders[i].customer = orders.docs[i].customer;
+                data.orders[i].items = orders.docs[i].items;
+                data.orders[i]._links = [{ "href": baseUrl + data.orders[i]._id, "rel": "self" }];
                 if (req.query.hasOwnProperty('apikey') && req.query.apikey == 'abc') {
-                    data.orders[i]._links.push({ "href": baseUrl + "/order/" + data.orders[i]._id, "rel": "remove" });
-                    data.orders[i]._links.push({ "href": baseUrl + "/order/" + data.orders[i]._id, "rel": "modify" });
+                    data.orders[i]._links.push({ "href": baseUrl + data.orders[i]._id, "rel": "remove" });
+                    data.orders[i]._links.push({ "href": baseUrl + data.orders[i]._id, "rel": "modify" });
                 }
             }
-            data._links = [{ "href": baseUrl + "/order", "rel": "list" }];
-            if (req.query.hasOwnProperty('apikey') && req.query.apikey == 'abc') data._links.push({ "href": "http://localhost:8080/order", "rel": "add" });
+            data._links = [{ "href": baseUrl.slice(0, -1) + "?page=1&limit=10", "rel": "list" }];
+            if (req.query.hasOwnProperty('apikey') && req.query.apikey == 'abc') data._links.push({ "href": baseUrl.slice(0, -1), "rel": "add" });
+
+            // construct pagination links
+            var links = []
+            links.push("<" + baseUrl + "?page=" + orders.page + "&limit=" + orders.limit + ' rel="self">');
+            if (orders.page > 1) links.push("<" + baseUrl + "?page=" + (orders.page-1) + "&limit=" + orders.limit + ' rel="prev">');
+            if (orders.page < orders.pages) links.push("<" + baseUrl + "?page=" + (orders.page+1) + "&limit=" + orders.limit + ' rel="next">');
+            links.push("<" + baseUrl + "?page=1&limit=" + orders.limit + ' rel="first">');
+            links.push("<" + baseUrl + "?page=" + orders.pages + "&limit=" + orders.limit + ' rel="last">');
+            res.header('Link', links);
+
             res.json(data);
 
         });
@@ -44,15 +55,15 @@ module.exports = (function() {
                         data._id = orders[i]._id;
                         data.customer = orders[i].customer;
                         data.items = orders[i].items;
-                        data._links = [{ "href": baseUrl + "/order/" + data._id, "rel": "self" }];
+                        data._links = [{ "href": baseUrl + data._id, "rel": "self" }];
                         if (req.query.hasOwnProperty('apikey') && req.query.apikey == 'abc') {
-                            data._links.push({ "href": baseUrl + "/order/" + data._id, "rel": "remove" });
-                            data._links.push({ "href": baseUrl + "/order/" + data._id, "rel": "modify" });
+                            data._links.push({ "href": baseUrl + data._id, "rel": "remove" });
+                            data._links.push({ "href": baseUrl + data._id, "rel": "modify" });
                         }
 
                         // get prev and next
-                        if (i != 0) data._links.push({ "href": baseUrl + "/order/" + orders[i - 1]._id, "rel": "prev" });
-                        if (i != orders.length-1) data._links.push({ "href": baseUrl + "/order/" + orders[i + 1]._id, "rel": "next" });
+                        if (i != 0) data._links.push({ "href": baseUrl + orders[i - 1]._id, "rel": "prev" });
+                        if (i != orders.length-1) data._links.push({ "href": baseUrl + orders[i + 1]._id, "rel": "next" });
 
                         founded = true;
                         res.json(data);
@@ -95,7 +106,7 @@ module.exports = (function() {
 
                     // construct response with HATEOAS
                     var data = {};
-                    data._links = [{ "href": baseUrl + "/order/" + order._id, "rel": "self" }];
+                    data._links = [{ "href": baseUrl + order._id, "rel": "self" }];
                     res.json(data);
                 });
             }
@@ -129,7 +140,7 @@ module.exports = (function() {
 
                             // construct response with HATEOAS
                             var data = {};
-                            data._links = [{ "href": baseUrl + "/order/" + order._id, "rel": "self" }];
+                            data._links = [{ "href": baseUrl + order._id, "rel": "self" }];
                             res.json(data);
                         });
                     }
@@ -162,7 +173,7 @@ module.exports = (function() {
 
                             // construct response with HATEOAS
                             var data = {};
-                            data._links = [{ "href": baseUrl + "/order", "rel": "list" }];
+                            data._links = [{ "href": baseUrl.slice(0, -1) + "?page=1&limit=10", "rel": "list" }];
                             res.json(data);
                         });
                     }

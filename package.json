@@ -1,5 +1,5 @@
 {
-  "name": "hw03",
+  "name": "w20-simpleapi",
   "version": "1.0.0",
   "description": "Simple REST API in node.js",
   "main": "app.js",
@@ -21,6 +21,8 @@
   "dependencies": {
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
-    "mongoose": "^4.4.7"
+    "express-paginate": "^0.2.0",
+    "mongoose": "^4.4.7",
+    "mongoose-paginate": "^5.0.0"
   }
 }
