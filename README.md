@@ -153,11 +153,11 @@ Status codes: 202 - ok, 400 - bad request, 404 - not found
 
 GET /order?page={Int}&limit={Int}&apikey={String} - get list of orders   
 This resource supports basic pagination using the Link HTTP header   
-(*optional* provide apikey for nonsafe HATEOAS links)   
+Optional: provide valid apikey for nonsafe HATEOAS links   
 Status codes: 200 - ok, 400 - bad request
 
 GET /order/:id?apikey={String} - get specific order   
-(*optional* provide apikey for nonsafe HATEOAS links)   
+Optional: provide valid apikey for nonsafe HATEOAS links   
 Status codes: 200 - ok, 400 - bad request, 404 - not found
 
 POST /order?apikey={String} - create order (valid apikey must be provided)  
